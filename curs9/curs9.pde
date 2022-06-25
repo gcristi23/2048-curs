@@ -10,19 +10,13 @@ void setup() {
 
   boxSize = width/4;
   boxHalf = boxSize/2;
-  
-  int randX = int(random(0,4));
-  int randY = int(random(0,4));
-  
-  print("randX, randY", randX, randY);
-  gameBoard[randX][randY] = 2;
-  
-  randX = int(random(0,4));
-  randY = int(random(0,4));
-  
-  print("randX, randY", randX, randY);
-  gameBoard[randX][randY] = 2;
-  
+  gameBoard[0][0]=4;
+  gameBoard[1][0]=2;
+  gameBoard[2][0]=2;
+
+  generateNumber();
+  generateNumber();
+
 }
 
 
@@ -42,7 +36,66 @@ void draw() {
   }
 }
 
-//0 0 2 0
+void generateNumber() {
+  int randY = int(random(0,4));
+  int randX = int(random(0,4));
+  
+  println("randY, randX", randY, randX);
+  
+  while(gameBoard[randY][randX] != 0) {
+    randY = int(random(0,4));
+    randX = int(random(0,4));
+  }
+  
+  gameBoard[randY][randX] = 2;
+}
+
+
+void keyPressed() {
+  //if(keyPressedByUser) return;
+  char myKey = key;
+  if (myKey >= 'a' && key <= 'z') {
+    myKey = (char)(myKey + 'A' - 'a');
+  }
+  
+  int i_copy; 
+  boolean added;
+
+  switch(myKey) {
+    case 'W':
+      for(int i = 1; i < 4; i++) {
+        for(int j = 0; j < 4; j++) {
+          i_copy = i;
+          added = false;
+          if(gameBoard[i_copy][j] != 0) {
+             while(i_copy != 0 && ((gameBoard[i_copy-1][j] == gameBoard[i_copy][j] && !added) || gameBoard[i_copy-1][j] == 0)) {
+               if(gameBoard[i_copy-1][j] == gameBoard[i_copy][j]) {
+                 gameBoard[i_copy-1][j] += gameBoard[i_copy][j];
+                 added = true;
+               } else {
+                 gameBoard[i_copy-1][j] = gameBoard[i_copy][j];
+               }
+               gameBoard[i_copy][j] = 0;
+               i_copy -= 1;
+             }
+          }
+        }
+      }
+      break;
+    case 'A':
+
+      break;
+    case 'S':
+
+      break;
+    case 'D':
+
+      break;
+  }
+  //keyPressedByUser = true;
+}
+
+//0 0 0 2
 //0 0 0 0
 //0 0 0 0
 //0 0 0 0
