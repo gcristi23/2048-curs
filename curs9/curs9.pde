@@ -38,16 +38,26 @@ void reset() {
   generateNumber();
 }
 
-void checkBoard() {
-  boolean zeroFound = false;
+void checkBoardAndReset() {
   
   for (int j=0; j<4; j++) {
     for (int i=0; i<4; i++) {
       if(gameBoard[i][j] == 0){
-        zeroFound = true;
+        return;
       }
+      
+      if(i>0 && i<3) {
+        if(gameBoard[i][j] == gameBoard[i-1][j]) return;
+        if(gameBoard[i][j] == gameBoard[i+1][j]) return;
+      } 
+      if(j>0 && j<3) {
+        if(gameBoard[i][j] == gameBoard[i][j+1]) return;
+        if(gameBoard[i][j] == gameBoard[i][j-1]) return;
+      } 
     }
   }
+  
+  reset();
 }
 
 void setupColors() {
@@ -68,14 +78,15 @@ void setupColors() {
 
 void draw() {
   background(0);
+  int boxColor;
   for (int j=0; j<4; j++) {
     for (int i=0; i<4; i++) {
-      fill(boxColors.get(gameBoard[j][i]));
+      boxColor = boxColors.get(gameBoard[j][i]);
+      fill(boxColor);
       
       rect(i*boxSize, j*boxSize, boxSize, boxSize);
       
-      if(gameBoard[j][i] == 0) fill(#E3E2E0);
-      else fill(#AA9D73);
+      fill(0);
       text(gameBoard[j][i], boxHalf + i*boxSize, j*boxSize);
     }
   }
@@ -93,6 +104,7 @@ void generateNumber() {
   println("randY, randX", randY, randX);
   
   gameBoard[randY][randX] = 2;
+  checkBoardAndReset();
 }
 
 
